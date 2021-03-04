@@ -12,14 +12,16 @@ class ViewController: UIViewController {
     
     let photoname = ["photo1.jpeg", "photo2.jpeg", "photo3.jpeg"]
     var photonumber = 0
+    
+    var playing = false //認識しているかどうか
+    var timer:Timer!
 
     @IBOutlet weak var imageView: UIImageView!
-    
-    @IBAction func tapAction(_ sender: Any) {
-        //遷移先へ画像を渡す
+    @IBOutlet weak var susumuButton: UIButton!
+    @IBOutlet weak var modoru: UIButton!
+    @IBOutlet weak var playButton: UIButton!
+        
 
-    }
-    
     //遷移先の画面から戻るsegueの設定
     @IBAction func unwind(_ segue: UIStoryboardSegue) {
     }
@@ -36,6 +38,20 @@ class ViewController: UIViewController {
         let resultViewController:ResultViewController = segue.destination as! ResultViewController
         // 遷移先のResultViewControllerで宣言しているimageに値を代入して渡す
         resultViewController.photoimage = imageView.image
+        
+       if playing == true{
+         // 停止ボタンを再生ボタンに変更
+           playButton.setTitle("再生", for: .normal)
+         // 進むボタンを使用可
+           susumuButton.isEnabled = true
+         // 戻るボタンを使用可
+           modoru.isEnabled = true
+         // タイマーを止める
+           timer.invalidate()
+           timer = nil
+           // 再生中
+           playing = false
+       }
     }
     
     //進むを押すと、次の画像へ移る
@@ -92,8 +108,7 @@ class ViewController: UIViewController {
             }
     }
     
-    var playing = false
-    var timer:Timer!
+
     @objc func updateTimer(_ timer: Timer) {
         if photonumber == 0{
             photonumber = 1
@@ -120,11 +135,7 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var susumuButton: UIButton!
-    
-    @IBOutlet weak var modoru: UIButton!
-    
-    @IBOutlet weak var playButton: UIButton!
+
     
     @IBAction func stopButton(_ sender: Any) {
         //タイマーが動いていないなら
@@ -137,7 +148,6 @@ class ViewController: UIViewController {
             modoru.isEnabled = false
             // 再生ボタンを停止ボタンに変更
             playButton.setTitle("停止", for: .normal)
-            
             //　再生中
             playing = true
         }
@@ -155,6 +165,8 @@ class ViewController: UIViewController {
             // 再生中
             playing = false
         }
+
+        
             
     }
     }
